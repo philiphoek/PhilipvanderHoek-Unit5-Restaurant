@@ -13,6 +13,8 @@ class CategoryTableViewController: UITableViewController {
 //    let menuController = MenuController()
     var categories = [String]()
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         MenuController.shared.fetchCategories { (categories) in
@@ -28,15 +30,11 @@ class CategoryTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
     }
-    
-    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return categories.count

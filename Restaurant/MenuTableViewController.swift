@@ -51,13 +51,23 @@ class MenuTableViewController: UITableViewController {
         cell.textLabel?.text = menuItem.name
         cell.detailTextLabel?.text = String(format: "$%.2f",
                                             menuItem.price)
+        MenuController.shared.fetchImage(url: menuItem.imageURL)
+        { (image) in
+            guard let image = image else { return }
+            DispatchQueue.main.async {
+                if let currentIndexPath =
+                    self.tableView.indexPath(for: cell),
+                    currentIndexPath != indexPath {
+                    return
+                }
+                cell.imageView?.image = image
+            }
+        }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender:
-        Any?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "MenuDetailSegue" {
-            let menuItemDetailViewController = segue.destination
-                as! MenuItemDetailViewController
+            let menuItemDetailViewController = segue.destination as! MenuItemDetailViewController
             let index = tableView.indexPathForSelectedRow!.row
             menuItemDetailViewController.menuItem = menuItems[index]
         }

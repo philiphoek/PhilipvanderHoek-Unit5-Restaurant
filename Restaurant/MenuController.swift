@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class MenuController {
     
@@ -15,6 +16,7 @@ class MenuController {
     
     func fetchCategories(completion: @escaping ([String]?) -> Void)
     {
+        // Get categorie data
         let categoryURL = baseURL.appendingPathComponent("categories")
         let task = URLSession.shared.dataTask(with: categoryURL)
         { (data, response, error) in
@@ -35,6 +37,7 @@ class MenuController {
     }
     
     func fetchMenuItems(categoryName: String, completion: @escaping ([MenuItem]?) -> Void) {
+        // Get menu item data
         let initialMenuURL = baseURL.appendingPathComponent("menu")
         var components = URLComponents(url: initialMenuURL, resolvingAgainstBaseURL: true)!
         components.queryItems = [URLQueryItem(name: "category", value: categoryName)]
@@ -53,6 +56,7 @@ class MenuController {
     }
     
     func submitOrder(menuIds: [Int], completion: @escaping (Int?) -> Void) {
+        // Get submit order data
         let orderURL = baseURL.appendingPathComponent("order")
         var request = URLRequest(url: orderURL)
         request.httpMethod = "POST"
@@ -74,4 +78,23 @@ class MenuController {
         }
         task.resume()
     }
+    
+    func fetchImage(url: URL, completion: @escaping (UIImage?) ->
+        Void) {
+        // Get the images
+        let task = URLSession.shared.dataTask(with: url) { (data,
+            response, error) in
+            if let data = data,
+                let image = UIImage(data: data) {
+                completion(image)
+            } else {
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
+}
+
+protocol AddToOrderDelegate { 
+    func added(menuItem: MenuItem)
 }
